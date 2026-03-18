@@ -1,0 +1,5 @@
+.DS_Store
+*.xcuserstate
+*.jpeg
+*.bin
+DerivedData/
