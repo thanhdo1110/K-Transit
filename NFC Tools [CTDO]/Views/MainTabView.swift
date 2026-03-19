@@ -4,6 +4,7 @@ struct MainTabView: View {
     @StateObject private var reader = NFCCardReader()
     @StateObject private var historyStore = ScanHistoryStore()
     @StateObject private var settings = SettingsStore()
+    @StateObject private var community = CommunityDataStore()
 
     var body: some View {
         TabView {
@@ -25,7 +26,11 @@ struct MainTabView: View {
         .environmentObject(reader)
         .environmentObject(historyStore)
         .environmentObject(settings)
+        .environmentObject(community)
         .preferredColorScheme(settings.theme.colorScheme)
         .environment(\.locale, settings.language.locale)
+        // Force FULL view tree rebuild when language changes
+        .id("root-\(settings.language.rawValue)")
+        .onAppear { community.refreshIfNeeded() }
     }
 }

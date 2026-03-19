@@ -24,9 +24,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		D6B4F4FD2F6AACD100C562BC /* NFC Tools [CTDO].app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "NFC Tools [CTDO].app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		D6B4F50A2F6AACD200C562BC /* NFC Tools [CTDO]Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "NFC Tools [CTDO]Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		D6B4F5142F6AACD200C562BC /* NFC Tools [CTDO]UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "NFC Tools [CTDO]UITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D6B4F4FD2F6AACD100C562BC /* NFC Tools [CTDO].app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = "NFC Tools [CTDO].app"; path = "K-Transit.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D6B4F50A2F6AACD200C562BC /* NFC Tools [CTDO]Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = "NFC Tools [CTDO]Tests.xctest"; path = "K-Transit.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D6B4F5142F6AACD200C562BC /* NFC Tools [CTDO]UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = "NFC Tools [CTDO]UITests.xctest"; path = "K-Transit.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */

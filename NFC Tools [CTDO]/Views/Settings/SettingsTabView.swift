@@ -2,6 +2,7 @@ import SwiftUI
 
 struct SettingsTabView: View {
     @EnvironmentObject var settings: SettingsStore
+    @EnvironmentObject var community: CommunityDataStore
 
     var body: some View {
         NavigationStack {
@@ -71,7 +72,7 @@ struct SettingsTabView: View {
                         url: "https://t.me/dothanh1110",
                         imageURL: "https://cdn5.telesco.pe/file/mJebRHpZmOEApRKwvBLIzjjFzn2KEuHLJcABwR2lwFIZ48W-qzH9LtV5yNyDkC1R7dwEr7PfnLt-KAuhP2Fk9i3LUeJKrga2EdewRO-oHATdmM3ZayxPKhYwuj0Bz8xcxCI8ta_yHq4mug3YIaM6PZgMdR6mdJhtaQZInvoTEECxK-saW7QSIJWnJyayKhBUa7gtUbUGMCwC4x_XWyAPFEqFGWDJ_5HN_N90qOjOi2p7SsGaP4yoWw1z93rikwq9FuGT-Ld4OtcS1vJE8dM9QUOK6MWE8T5Xsj1XlCfzWZIz4sBmMxZmDOqY7XKuDCPEFlis3lHVHTpyKH0FY6JOfQ.jpg",
                         title: "Đỗ Thành #1110",
-                        subtitle: "@dothanh1110 · 2,039 subscribers",
+                        subtitle: community.info.telegramSubscribers1 > 0 ? "@dothanh1110 · \(community.info.telegramSubscribers1) subscribers" : "@dothanh1110",
                         fallbackIcon: "paperplane.fill",
                         accentColor: Color(red: 0.16, green: 0.63, blue: 0.89)
                     )
@@ -81,17 +82,17 @@ struct SettingsTabView: View {
                         url: "https://t.me/dothanh1110v2",
                         imageURL: "https://cdn5.telesco.pe/file/cXPiZ3qxd_CRp4EYpxJOuApVxptOpzALW2YEWR0QrhDlTCOw3HpDEVKU0Gwby5W3icp4TEUJmuF7X41NU23b8cIm1Gwm4SGsCMcijePuLcQYc6ryWa32FlVfdHlUoew8e-S_tpqcfb4BA67txX_zoPl70PRydvsX6OvFgJtWv_YAijaK1x_yjjxZHj6c5k-aI2J7wcyEfl3pm4DFJ_bEs8Kfgv5Xf_4mIFWLikKMziculI8tlX1eUedVSYyk9Hh5_mhPEcK7RLHLRQECAd4dyC4A0DsvRb0WNFqHSTlCLQE4wfpULz8G8kVXmZwyxqsVrIF5Ld53EIzCXho14WDZKg.jpg",
                         title: "Đỗ Thành #1110 [V2]",
-                        subtitle: "@dothanh1110v2 · 1,178 subscribers",
+                        subtitle: community.info.telegramSubscribers2 > 0 ? "@dothanh1110v2 · \(community.info.telegramSubscribers2) subscribers" : "@dothanh1110v2",
                         fallbackIcon: "megaphone.fill",
                         accentColor: Color(red: 0.16, green: 0.63, blue: 0.89)
                     )
 
                     // Discord
                     socialLink(
-                        url: "https://discord.com/invite/9efNP6df",
-                        imageURL: "https://cdn.discordapp.com/icons/1272188246797062256/a98701be770571debcaeb7beb5fd56a9.png?size=128",
-                        title: "CTDOTEAM",
-                        subtitle: "Discord · 1,300 members · 183 online",
+                        url: "https://discord.com/invite/\(community.info.discordInvite)",
+                        imageURL: community.info.discordIconURL?.absoluteString,
+                        title: community.info.discordName,
+                        subtitle: community.info.discordMembers > 0 ? "Discord · \(community.info.discordMembers) members · \(community.info.discordOnline) online" : "Discord",
                         fallbackIcon: "bubble.left.and.bubble.right.fill",
                         accentColor: Color(red: 0.35, green: 0.40, blue: 0.95)
                     )
