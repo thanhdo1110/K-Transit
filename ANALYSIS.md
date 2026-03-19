@@ -19,40 +19,44 @@
 
 ## Known Issues
 
-### 1. Timestamp Epoch Wrong (SFI 3, 52B records)
-- **Current epoch**: 1998-01-01 00:00:00 KST
-- **Result**: dates show ~Nov 2025 (BEFORE purchase in Dec 2025)
-- **Fix needed**: epoch should be ~2 months later (~1998-03-01?)
-- **With corrected epoch**: dates become Jan 2026 (AFTER purchase) ✅
-- **Timestamp location**: bytes[11-14] big-endian uint32, seconds from epoch
-- **Example**: `34 71 91 40` = 879,530,304 sec
+### 1. ~~Timestamp Epoch Wrong~~ → FIXED: Packed Date-Time Format
+- **OLD assumption**: bytes[11-14] = uint32 seconds from 1998-01-01 → WRONG
+- **CORRECT format**: packed date-time in 32 bits:
+  - bits[31:16] = day counter (epoch = **1989-06-14**)
+  - bits[15:11] = hour (0-23)
+  - bits[10:5] = minute (0-59)
+  - bits[4:0] = second / 2 (0-29, gives 2-second resolution)
+- **Verified**: cross-referenced with other transit app's known correct dates
+- **Example**: `34 72 91 32` → day=0x3472=13426 (2026-03-18), time=18:09:36
+- **Metrodroid note**: metrodroid uses BCD datetime at bytes[26-32] of SFI 4 (only in 0x0720 records). Our packed format at SFI 3 [11-14] is more complete.
 
-### 2. Timestamp Wrong (SFI 5 / 90 4E, 46B records)
-- **Current logic**: bytes[14-15]=`07 20` marker → bytes[18-21] as seconds from 2000-01-01
-- **Result**: dates show Jul 2025 (IMPOSSIBLE - card not purchased)
-- **Fix needed**: find correct epoch or correct byte offsets
-- **CLUE**: T-money SFI4#9 bytes[26-32] = `20 26 03 17 12 26 38` = BCD **2026-03-17 12:26:38** KST = yesterday's date! This might be last-NFC-read timestamp, not transaction date.
+### 2. ~~Timestamp Wrong (0x0720 records)~~ → FIXED: No Timestamps Here
+- bytes[14-15]=`07 20` marker records are "card read" events, NOT transit charges
+- bytes[18-21] are NOT timestamps (verified: time deltas don't match BCD dates)
+- bytes[26-32] contain BCD last-NFC-read time (confirmed by metrodroid source)
+- **Fix**: don't parse timestamps from 0x0720 records at all
 
-### 3. SFI 3 + SFI 4 Overlap
+### 3. ~~SFI 3 + SFI 4 Overlap~~ → FIXED: Merge by Position
 - SFI 3 (52B): trip detail with timestamps, no balance
 - SFI 4 (26B Cashbee / 46B T-money): financial log with real balance, no timestamps
-- They contain the SAME transactions from different perspectives
-- **Need**: merge by matching counters (SFI3 bytes[4-5] vs SFI4 bytes[8-9])
+- **Solution**: extract alighting timestamps from SFI 3, match positionally with SFI 4 charge records (fare > 0). Both ordered newest-first.
+- Top-ups (type=0x02) in SFI 4 handled separately (no timestamp needed)
 
-### 4. Issue Date Parsing
+### 4. Issue Date Parsing (unchanged, low priority)
 - PurseInfo[17-20] parsed as BCD YYYYMMDD
-- T-money: `20 24 05 20` → 2024-05-20 (user says bought Dec 2025)
+- T-money: `20 24 05 20` → 2024-05-20 (manufacturing date, not purchase date)
 - Cashbee: `20 25 10 21` → 2025-10-21
-- Likely MANUFACTURING date, not purchase date. Or BCD parsing wrong.
+- Confirmed by metrodroid: uses `parseHexDate` with BCD conversion (same approach)
 
-### 5. Top-ups Mixed with Trips
-- SFI 4 = recent trips (last 5), SFI 5 = top-up history (T-money only)
-- Different time periods → balance chain breaks when shown together
-- **Fix**: display as separate sections
+### 5. ~~Top-ups Mixed with Trips~~ → FIXED: Separate Processing
+- SFI 4 transit charges shown with timestamps from SFI 3
+- SFI 4 top-ups shown inline (Cashbee)
+- SFI 5 top-ups appended after (T-money only, older records)
+- Zero-fare boarding taps filtered out
 
-### 6. Cashbee SFI 5 Garbage Record
-- SFI5#1: `70 18 08 00 00 00 03 0B...` → type=112 (0x70), balance=0
-- Not a valid transaction, needs filtering (type should be 01 or 02)
+### 6. ~~Cashbee SFI 5 Garbage Record~~ → FIXED: Type Filter
+- SFI5#1: `70 18 08 00...` → type=0x70, filtered by `guard data[0] == 0x02`
+- Only type=0x02 (topUp) records pass through
 
 ---
 
@@ -87,7 +91,7 @@
 [6-8]   terminal data
 [9]     unknown (01)
 [10]    fee type? (FF or F4)
-[11-14] TIMESTAMP (big-endian uint32, seconds from ~1998 epoch)
+[11-14] TIMESTAMP (packed: [16-bit day from 1989-06-14][5-bit hour][6-bit min][5-bit sec/2])
 [15-17] unknown
 [18]    unknown
 [19-20] pre-charge balance? (only on boarding records)

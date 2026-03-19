@@ -11,7 +11,7 @@ import SwiftUI
 struct NFC_Tools__CTDO_App: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MainTabView()
         }
     }
 }

@@ -1,18 +1,25 @@
 {
   "sourceLanguage" : "ko",
   "strings" : {
+    "--:--:--" : {
+
+    },
+    "%@ %@" : {
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ %2$@"
+          }
+        }
+      }
+    },
     "%@ 읽기 완료!" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ read complete!"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ 읽기 완료!"
           }
         },
         "vi" : {
@@ -23,27 +30,31 @@
         }
       }
     },
+    "%lld" : {
+
+    },
     "%lld건" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%lld trip(s)"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld건"
+            "value" : "%lld item(s)"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%lld chuyến"
+            "value" : "%lld mục"
           }
         }
       }
+    },
+    "Build" : {
+
+    },
+    "by Đỗ Trung Thành" : {
+
     },
     "Cashbee (캐시비)" : {
       "extractionState" : "stale",
@@ -54,12 +65,6 @@
             "value" : "Cashbee"
           }
         },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cashbee (캐시비)"
-          }
-        },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -68,15 +73,12 @@
         }
       }
     },
+    "CTDO.NET" : {
+
+    },
     "Debug Log (%lld)" : {
       "localizations" : {
         "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Debug Log (%lld)"
-          }
-        },
-        "ko" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Debug Log (%lld)"
@@ -98,12 +100,6 @@
             "value" : "MIFARE %@ card"
           }
         },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "MIFARE %@ 카드"
-          }
-        },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -112,18 +108,15 @@
         }
       }
     },
+    "NFC Tools [CTDO]" : {
+
+    },
     "NFC 오류: %@" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "NFC error: %@"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "NFC 오류: %@"
           }
         },
         "vi" : {
@@ -143,12 +136,6 @@
             "value" : "Rail Plus"
           }
         },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Rail Plus (레일플러스)"
-          }
-        },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -165,16 +152,45 @@
             "value" : "Raw Data (%lld)"
           }
         },
-        "ko" : {
+        "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Raw Data (%lld)"
+            "value" : "Dữ liệu thô (%lld)"
+          }
+        }
+      }
+    },
+    "Raw 데이터와 디버그 로그를 표시합니다" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shows raw data and debug logs"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dữ liệu thô (%lld)"
+            "value" : "Hiển thị dữ liệu thô và nhật ký debug"
+          }
+        }
+      }
+    },
+    "Supported Cards" : {
+
+    },
+    "T-money · Cashbee · Rail+" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "T-money · Cashbee · Rail+"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "T-money · Cashbee · Rail+"
           }
         }
       }
@@ -188,12 +204,6 @@
             "value" : "T-money"
           }
         },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "T-money (티머니)"
-          }
-        },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -202,8 +212,21 @@
         }
       }
     },
-    "UID" : {
-
+    "개발자" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Developer"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nhà phát triển"
+          }
+        }
+      }
     },
     "결제" : {
       "extractionState" : "stale",
@@ -212,12 +235,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Payment"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "결제"
           }
         },
         "vi" : {
@@ -236,12 +253,6 @@
             "value" : "Senior"
           }
         },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "경로 (Senior)"
-          }
-        },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -251,7 +262,36 @@
       }
     },
     "교통 이용" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Transit"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Giao thông"
+          }
+        }
+      }
+    },
+    "교통 이용 내역" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trip Details"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chi tiết chuyến đi"
+          }
+        }
+      }
     },
     "교통카드 리더" : {
       "localizations" : {
@@ -259,12 +299,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Transit Card Reader"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "교통카드 리더"
           }
         },
         "vi" : {
@@ -283,16 +317,42 @@
             "value" : "Hold transit card near back of iPhone"
           }
         },
-        "ko" : {
+        "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "교통카드를 iPhone 뒷면에 가까이 대주세요"
+            "value" : "Đặt thẻ giao thông gần mặt sau iPhone"
+          }
+        }
+      }
+    },
+    "기록" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "History"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Đặt thẻ giao thông gần mặt sau iPhone"
+            "value" : "Lịch sử"
+          }
+        }
+      }
+    },
+    "기차" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Train"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tàu hỏa"
           }
         }
       }
@@ -304,12 +364,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Other"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "기타"
           }
         },
         "vi" : {
@@ -329,12 +383,6 @@
             "value" : "Other (%lld)"
           }
         },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "기타 (%lld)"
-          }
-        },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -344,7 +392,36 @@
       }
     },
     "기타 (%u)" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Other (%u)"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Khác (%u)"
+          }
+        }
+      }
+    },
+    "기타 교통" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Other"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Khác"
+          }
+        }
+      }
     },
     "기타 이용" : {
       "localizations" : {
@@ -354,16 +431,90 @@
             "value" : "Other"
           }
         },
-        "ko" : {
+        "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "기타 이용"
+            "value" : "Khác"
+          }
+        }
+      }
+    },
+    "다크" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dark"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Khác"
+            "value" : "Tối"
+          }
+        }
+      }
+    },
+    "디버그 모드" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Debug Mode"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chế độ debug"
+          }
+        }
+      }
+    },
+    "라이트" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Light"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sáng"
+          }
+        }
+      }
+    },
+    "모든 스캔 기록을 삭제하시겠습니까?" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete all scan history?"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Xóa toàn bộ lịch sử quét?"
+          }
+        }
+      }
+    },
+    "버스" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bus"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Xe buýt"
           }
         }
       }
@@ -377,16 +528,90 @@
             "value" : "Bus/Subway"
           }
         },
-        "ko" : {
+        "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "버스/지하철 이용"
+            "value" : "Xe buýt/Tàu điện"
+          }
+        }
+      }
+    },
+    "버전" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Xe buýt/Tàu điện"
+            "value" : "Phiên bản"
+          }
+        }
+      }
+    },
+    "삭제" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Xóa"
+          }
+        }
+      }
+    },
+    "설정" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settings"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cài đặt"
+          }
+        }
+      }
+    },
+    "스캔 기록" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scan History"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lịch sử quét"
+          }
+        }
+      }
+    },
+    "스캔 기록이 없습니다" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No scan history"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Không có lịch sử quét"
           }
         }
       }
@@ -399,16 +624,43 @@
             "value" : "Scanning..."
           }
         },
-        "ko" : {
+        "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "스캔 중..."
+            "value" : "Đang quét..."
+          }
+        }
+      }
+    },
+    "승차" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Board"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Đang quét..."
+            "value" : "Lên xe"
+          }
+        }
+      }
+    },
+    "시스템" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "System"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hệ thống"
           }
         }
       }
@@ -422,16 +674,27 @@
             "value" : "Unknown"
           }
         },
-        "ko" : {
+        "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "알 수 없음"
+            "value" : "Không xác định"
+          }
+        }
+      }
+    },
+    "앱을 다시 시작하면 언어가 변경됩니다" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restart app to apply language change"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Không xác định"
+            "value" : "Khởi động lại ứng dụng để thay đổi ngôn ngữ"
           }
         }
       }
@@ -444,16 +707,26 @@
             "value" : "Child"
           }
         },
-        "ko" : {
+        "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "어린이 (Child)"
+            "value" : "Trẻ em"
+          }
+        }
+      }
+    },
+    "언어" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Language"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Trẻ em"
+            "value" : "Ngôn ngữ"
           }
         }
       }
@@ -465,12 +738,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Connection failed"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "연결 실패"
           }
         },
         "vi" : {
@@ -489,16 +756,58 @@
             "value" : "Connection failed: %@"
           }
         },
-        "ko" : {
+        "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "연결 실패: %@"
+            "value" : "Kết nối thất bại: %@"
+          }
+        }
+      }
+    },
+    "외관" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Appearance"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kết nối thất bại: %@"
+            "value" : "Giao diện"
+          }
+        }
+      }
+    },
+    "은행/신용카드는 iOS 보안 정책으로 읽을 수 없습니다. T-money, Cashbee 등 교통 전용 카드만 지원됩니다." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bank/credit cards cannot be read due to iOS security policy. Only transit cards (T-money, Cashbee, etc.) are supported."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thẻ ngân hàng/tín dụng không thể đọc do chính sách bảo mật iOS. Chỉ hỗ trợ thẻ giao thông (T-money, Cashbee, v.v.)."
+          }
+        }
+      }
+    },
+    "은행카드 미지원" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bank card not supported"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Không hỗ trợ thẻ ngân hàng"
           }
         }
       }
@@ -508,13 +817,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "NFC not supported"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "이 기기는 NFC를 지원하지 않습니다"
+            "value" : "This device does not support NFC"
           }
         },
         "vi" : {
@@ -530,19 +833,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Trip History"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "이용 내역"
+            "value" : "Transaction History"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Lịch sử sử dụng"
+            "value" : "Lịch sử giao dịch"
           }
         }
       }
@@ -552,19 +849,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No trip history"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "이용 내역이 없습니다"
+            "value" : "No transaction history"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Không có lịch sử"
+            "value" : "Không có lịch sử giao dịch"
           }
         }
       }
@@ -575,12 +866,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Adult"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "일반 (Adult)"
           }
         },
         "vi" : {
@@ -600,12 +885,6 @@
             "value" : "Read complete!"
           }
         },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "읽기 완료!"
-          }
-        },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -615,17 +894,12 @@
       }
     },
     "잔액" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Balance"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "잔액"
           }
         },
         "vi" : {
@@ -644,16 +918,42 @@
             "value" : "Disabled"
           }
         },
-        "ko" : {
+        "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "장애인 (Disabled)"
+            "value" : "Người khuyết tật"
+          }
+        }
+      }
+    },
+    "전체 삭제" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clear All"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Người khuyết tật"
+            "value" : "Xóa tất cả"
+          }
+        }
+      }
+    },
+    "정보" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "About"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thông tin"
           }
         }
       }
@@ -666,16 +966,26 @@
             "value" : "Unsupported card"
           }
         },
-        "ko" : {
+        "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "지원하지 않는 카드"
+            "value" : "Thẻ không được hỗ trợ"
+          }
+        }
+      }
+    },
+    "지하철" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Subway"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Thẻ không được hỗ trợ"
+            "value" : "Tàu điện ngầm"
           }
         }
       }
@@ -686,12 +996,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Teenager"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "청소년 (Teen)"
           }
         },
         "vi" : {
@@ -710,12 +1014,6 @@
             "value" : "Top-up"
           }
         },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "충전"
-          }
-        },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -724,18 +1022,29 @@
         }
       }
     },
+    "취소" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hủy"
+          }
+        }
+      }
+    },
     "카드 번호" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Card Number"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "카드 번호"
           }
         },
         "vi" : {
@@ -752,12 +1061,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Scan Card"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "카드 스캔"
           }
         },
         "vi" : {
@@ -777,12 +1080,6 @@
             "value" : "Card connection failed"
           }
         },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "카드 연결 실패"
-          }
-        },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -797,12 +1094,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Card connection failed: %@"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "카드 연결 실패: %@"
           }
         },
         "vi" : {
@@ -821,12 +1112,6 @@
             "value" : "Card read complete!"
           }
         },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "카드 읽기 완료!"
-          }
-        },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -841,12 +1126,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hold card near phone..."
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "카드를 가까이 대주세요..."
           }
         },
         "vi" : {
@@ -866,16 +1145,26 @@
             "value" : "Card not detected"
           }
         },
-        "ko" : {
+        "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "카드를 감지하지 못했습니다"
+            "value" : "Không phát hiện thẻ"
+          }
+        }
+      }
+    },
+    "카드를 스캔하면 여기에 기록됩니다" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scan a card to see it here"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Không phát hiện thẻ"
+            "value" : "Quét thẻ để xem ở đây"
           }
         }
       }
@@ -885,13 +1174,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Card read but unrecognized"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "카드를 읽었지만 인식할 수 없는 카드입니다"
+            "value" : "Card read but not recognized"
           }
         },
         "vi" : {
@@ -902,7 +1185,24 @@
         }
       }
     },
+    "커뮤니티" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Community"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cộng đồng"
+          }
+        }
+      }
+    },
     "태그" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -910,16 +1210,59 @@
             "value" : "Tag"
           }
         },
-        "ko" : {
+        "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "태그"
+            "value" : "Tag"
+          }
+        }
+      }
+    },
+    "테마" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Theme"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tag"
+            "value" : "Chủ đề"
+          }
+        }
+      }
+    },
+    "하차" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alight"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Xuống xe"
+          }
+        }
+      }
+    },
+    "확인" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Check"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kiểm tra"
           }
         }
       }
@@ -933,12 +1276,6 @@
             "value" : "Transfer"
           }
         },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "환승"
-          }
-        },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -948,7 +1285,20 @@
       }
     },
     "환승 이용" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Transfer"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chuyển tuyến"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

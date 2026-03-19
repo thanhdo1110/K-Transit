@@ -1,5 +1,27 @@
+# macOS
 .DS_Store
+._*
+
+# Xcode
 *.xcuserstate
-*.jpeg
-*.bin
+xcuserdata/
+*.xcodeproj/project.xcworkspace/xcuserdata/
 DerivedData/
+build/
+*.ipa
+*.dSYM.zip
+*.dSYM
+*.moved-aside
+*.hmap
+
+# Binary / Media (dev screenshots)
+*.bin
+*.jpeg
+[0-9].png
+IMG_*.png
+
+# Archive exports
+NFC Tools [CTDO] 2026-*/
+
+# Misc
+*.log

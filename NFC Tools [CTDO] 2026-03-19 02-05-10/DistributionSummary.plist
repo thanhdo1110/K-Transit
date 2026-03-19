@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>NFC Tools [CTDO].ipa</key>
+	<array>
+		<dict>
+			<key>architectures</key>
+			<array>
+				<string>arm64</string>
+			</array>
+			<key>buildNumber</key>
+			<string>1</string>
+			<key>certificate</key>
+			<dict>
+				<key>SHA1</key>
+				<string>390A1D9E33C78819CF31E21D0886386F7B57EFAD</string>
+				<key>dateExpires</key>
+				<string>25/2/27</string>
+				<key>type</key>
+				<string>Apple Distribution</string>
+			</dict>
+			<key>entitlements</key>
+			<dict>
+				<key>application-identifier</key>
+				<string>LLZM5H44HX.com.ctdo.net.NFC-Tools</string>
+				<key>com.apple.developer.nfc.readersession.formats</key>
+				<array>
+					<string>TAG</string>
+					<string>NDEF</string>
+				</array>
+				<key>com.apple.developer.team-identifier</key>
+				<string>LLZM5H44HX</string>
+				<key>get-task-allow</key>
+				<false/>
+			</dict>
+			<key>name</key>
+			<string>NFC Tools [CTDO].app</string>
+			<key>profile</key>
+			<dict>
+				<key>UUID</key>
+				<string>b3d64875-eb36-4fda-918e-c1882bae8e29</string>
+				<key>dateExpires</key>
+				<string>25/2/27</string>
+				<key>name</key>
+				<string>iOS Team Ad Hoc Provisioning Profile: com.ctdo.net.NFC-Tools</string>
+			</dict>
+			<key>team</key>
+			<dict>
+				<key>id</key>
+				<string>LLZM5H44HX</string>
+				<key>name</key>
+				<string>DO THANH</string>
+			</dict>
+			<key>versionNumber</key>
+			<string>1.0</string>
+		</dict>
+	</array>
+</dict>
+</plist>

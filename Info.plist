@@ -22,6 +22,31 @@
 		<string>D4100000020002</string>
 		<!-- KFTC -->
 		<string>A0000004760101</string>
+		<!-- Visa -->
+		<string>A0000000031010</string>
+		<string>A0000000032010</string>
+		<string>A0000000033010</string>
+		<!-- Mastercard -->
+		<string>A0000000041010</string>
+		<string>A0000000042010</string>
+		<string>A0000000043060</string>
+		<!-- JCB -->
+		<string>A0000000651010</string>
+		<!-- UnionPay -->
+		<string>A000000333010101</string>
+		<string>A000000333010106</string>
+		<!-- BC Card (Korean) -->
+		<string>D4100000150001</string>
+		<string>D4100000160001</string>
+		<!-- Woori / Korean bank transit variants -->
+		<string>D4100000050001</string>
+		<string>D4100000060001</string>
+		<string>D4100000100001</string>
+		<string>D4100000110001</string>
+		<string>D4100000120001</string>
+		<string>D4100000130001</string>
+		<!-- AMEX -->
+		<string>A000000025010801</string>
 		<!-- PSE / PPSE -->
 		<string>325041592E5359532E4444463031</string>
 		<string>315041592E5359532E4444463031</string>

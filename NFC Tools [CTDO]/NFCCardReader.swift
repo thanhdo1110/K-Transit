@@ -2,71 +2,7 @@ import Foundation
 import Combine
 import CoreNFC
 
-// MARK: - Models
-
-enum KoreanCardType: String, Sendable {
-    case tmoney = "T-money (티머니)"
-    case cashbee = "Cashbee (캐시비)"
-    case railplus = "Rail Plus (레일플러스)"
-    case unknown = "알 수 없음"
-
-    var displayName: String {
-        String(localized: String.LocalizationValue(rawValue))
-    }
-
-    var icon: String {
-        switch self {
-        case .tmoney: return "bus.fill"
-        case .cashbee: return "creditcard.fill"
-        case .railplus: return "tram.fill"
-        case .unknown: return "questionmark.circle.fill"
-        }
-    }
-}
-
-struct TransactionRecord: Identifiable, Sendable {
-    let id = UUID()
-    let amount: Int
-    let balance: Int
-    let date: Date?
-    let type: TransactionType
-
-    enum TransactionType: String, Sendable {
-        case topUp = "충전"
-        case payment = "결제"
-        case transfer = "환승"
-        case unknown = "기타"
-
-        var displayName: String {
-            String(localized: String.LocalizationValue(rawValue))
-        }
-
-        var icon: String {
-            switch self {
-            case .topUp: return "plus.circle.fill"
-            case .payment: return "minus.circle.fill"
-            case .transfer: return "arrow.triangle.swap"
-            case .unknown: return "questionmark.circle"
-            }
-        }
-    }
-}
-
-struct TransitCardInfo: Sendable {
-    var cardType: KoreanCardType = .unknown
-    var cardUID: String = ""
-    var balance: Int = 0
-    var cardNumber: String = ""
-    var transactions: [TransactionRecord] = []
-    var rawData: [(key: String, value: String)] = []
-    var debugLog: [String] = []
-    var tagType: String = ""
-
-    mutating func dlog(_ msg: String) {
-        print("[NFC-CTDO] \(msg)")
-        debugLog.append(msg)
-    }
-}
+// Models are defined in /Models/ folder (KoreanCardType, TransactionRecord, TripRecord, TripLeg, TransitCardInfo)
 
 // MARK: - NFC Card Reader
 
@@ -108,7 +44,7 @@ class NFCCardReader: NSObject, ObservableObject {
 
     func startScan() {
         guard NFCTagReaderSession.readingAvailable else {
-            errorMessage = String(localized: "이 기기는 NFC를 지원하지 않습니다")
+            errorMessage = L("이 기기는 NFC를 지원하지 않습니다")
             log("❌ NFC not available on this device")
             return
         }
@@ -145,7 +81,7 @@ class NFCCardReader: NSObject, ObservableObject {
 
         cardInfo = nil
         errorMessage = nil
-        statusMessage = String(localized: "카드를 가까이 대주세요...")
+        statusMessage = L("카드를 가까이 대주세요...")
         isScanning = true
 
         session = NFCTagReaderSession(
@@ -154,7 +90,7 @@ class NFCCardReader: NSObject, ObservableObject {
             queue: .main
         )
         log("Session created: \(session != nil ? "OK" : "NIL")")
-        session?.alertMessage = String(localized: "교통카드를 iPhone 뒷면에 가까이 대주세요")
+        session?.alertMessage = L("교통카드를 iPhone 뒷면에 가까이 대주세요")
         session?.begin()
         log("Session begun")
     }
@@ -228,20 +164,20 @@ class NFCCardReader: NSObject, ObservableObject {
         // --- Basic tag info ---
         let uid = tag.identifier
         info.cardUID = Self.hexCompact(uid)
-        info.rawData.append(("UID", Self.hex(uid)))
-        info.rawData.append(("UID (hex compact)", Self.hexCompact(uid)))
+        info.rawData.append(RawDataEntry(key: "UID", value: Self.hex(uid)))
+        info.rawData.append(RawDataEntry(key: "UID (hex compact)", value: Self.hexCompact(uid)))
         info.dlog("[TAG] Type: ISO 7816")
         info.dlog("[TAG] UID: \(Self.hex(uid))")
 
         if let hist = tag.historicalBytes {
-            info.rawData.append(("Historical Bytes", Self.hex(hist)))
+            info.rawData.append(RawDataEntry(key: "Historical Bytes", value: Self.hex(hist)))
             info.dlog("[TAG] Historical Bytes (\(hist.count)B): \(Self.hex(hist))")
         } else {
             info.dlog("[TAG] Historical Bytes: nil")
         }
 
         if let appData = tag.applicationData {
-            info.rawData.append(("Application Data", Self.hex(appData)))
+            info.rawData.append(RawDataEntry(key: "Application Data", value: Self.hex(appData)))
             info.dlog("[TAG] Application Data (\(appData.count)B): \(Self.hex(appData))")
         } else {
             info.dlog("[TAG] Application Data: nil")
@@ -249,7 +185,7 @@ class NFCCardReader: NSObject, ObservableObject {
 
         let initialAID = tag.initialSelectedAID
         if !initialAID.isEmpty {
-            info.rawData.append(("Initial Selected AID", initialAID))
+            info.rawData.append(RawDataEntry(key: "Initial Selected AID", value: initialAID))
             info.dlog("[TAG] Initial Selected AID: \(initialAID)")
         }
 
@@ -267,9 +203,9 @@ class NFCCardReader: NSObject, ObservableObject {
                 )
                 let swHex = String(format: "%02X%02X", sw1, sw2)
                 info.dlog("[SELECT] Response SW: \(swHex), Data (\(data.count)B): \(Self.hex(data))")
-                info.rawData.append(("SELECT \(aidHex) → SW", swHex))
+                info.rawData.append(RawDataEntry(key: "SELECT \(aidHex) → SW", value: swHex))
                 if !data.isEmpty {
-                    info.rawData.append(("SELECT \(aidHex) → Data", Self.hex(data)))
+                    info.rawData.append(RawDataEntry(key: "SELECT \(aidHex) → Data", value: Self.hex(data)))
                 }
 
                 guard sw1 == 0x90 && sw2 == 0x00 else {
@@ -303,46 +239,46 @@ class NFCCardReader: NSObject, ObservableObject {
                     let issuer = pd[base + 3]
                     let resolvedType = Self.issuerMap[issuer] ?? cardType
                     info.cardType = resolvedType
-                    info.rawData.append(("Issuer (idCenter)", String(format: "%02X (%d)", issuer, issuer)))
+                    info.rawData.append(RawDataEntry(key: "Issuer (idCenter)", value: String(format: "%02X (%d)", issuer, issuer)))
                     info.dlog("[PURSE] Issuer: \(issuer) → \(resolvedType.rawValue)")
 
                     // [4-11] CSN (Card Serial Number, 8 bytes)
                     if pd.count >= base + 12 {
                         let csn = Self.hexCompact(pd[(base+4)...(base+11)])
                         info.cardNumber = csn
-                        info.rawData.append(("Card Serial (CSN)", csn))
+                        info.rawData.append(RawDataEntry(key: "Card Serial (CSN)", value: csn))
                         info.dlog("[PURSE] CSN: \(csn)")
                     }
 
                     // [17-20] Issue date (BCD YYYYMMDD)
                     if pd.count >= base + 21 {
                         let issueHex = Self.hexCompact(pd[(base+17)...(base+20)])
-                        info.rawData.append(("Issue Date", issueHex))
+                        info.rawData.append(RawDataEntry(key: "Issue Date", value: issueHex))
                         info.dlog("[PURSE] Issue Date: \(issueHex)")
                     }
 
                     // [21-24] Expiry date (BCD YYYYMMDD)
                     if pd.count >= base + 25 {
                         let expHex = Self.hexCompact(pd[(base+21)...(base+24)])
-                        info.rawData.append(("Expiry Date", expHex))
+                        info.rawData.append(RawDataEntry(key: "Expiry Date", value: expHex))
                         info.dlog("[PURSE] Expiry: \(expHex)")
                     }
 
                     // [0] cardType, [1] alg, [2] vk, [26] userCode
-                    info.rawData.append(("Card Type", String(format: "%02X", pd[base])))
-                    info.rawData.append(("Algorithm", String(format: "%02X", pd[base + 1])))
+                    info.rawData.append(RawDataEntry(key: "Card Type", value: String(format: "%02X", pd[base])))
+                    info.rawData.append(RawDataEntry(key: "Algorithm", value: String(format: "%02X", pd[base + 1])))
                     if pd.count >= base + 27 {
                         let userCode = pd[base + 26]
                         let userType: String
                         switch userCode {
-                        case 1: userType = String(localized: "일반 (Adult)")
-                        case 2: userType = String(localized: "어린이 (Child)")
-                        case 3: userType = String(localized: "경로 (Senior)")
-                        case 4: userType = String(localized: "청소년 (Teen)")
-                        case 5: userType = String(localized: "장애인 (Disabled)")
-                        default: userType = String(localized: "기타 (\(userCode))")
+                        case 1: userType = L("일반 (Adult)")
+                        case 2: userType = L("어린이 (Child)")
+                        case 3: userType = L("경로 (Senior)")
+                        case 4: userType = L("청소년 (Teen)")
+                        case 5: userType = L("장애인 (Disabled)")
+                        default: userType = L("기타 (\(userCode))")
                         }
-                        info.rawData.append(("User Type", userType))
+                        info.rawData.append(RawDataEntry(key: "User Type", value: userType))
                         info.dlog("[PURSE] User: \(userType)")
                     }
                 } else {
@@ -351,7 +287,7 @@ class NFCCardReader: NSObject, ObservableObject {
                     info.dlog("[FCI] No B0 tag, raw parse")
                     if data.count >= 12 {
                         info.cardNumber = Self.hexCompact(data[4..<12])
-                        info.rawData.append(("Card ID (raw)", Self.hexCompact(data[4..<12])))
+                        info.rawData.append(RawDataEntry(key: "Card ID (raw)", value: Self.hexCompact(data[4..<12])))
                     }
                 }
 
@@ -364,8 +300,8 @@ class NFCCardReader: NSObject, ObservableObject {
                     )
                     let bswHex = String(format: "%02X%02X", bsw1, bsw2)
                     info.dlog("[BALANCE] SW: \(bswHex), Data (\(balData.count)B): \(Self.hex(balData))")
-                    info.rawData.append(("Balance → SW", bswHex))
-                    info.rawData.append(("Balance → Raw Data", Self.hex(balData)))
+                    info.rawData.append(RawDataEntry(key: "Balance → SW", value: bswHex))
+                    info.rawData.append(RawDataEntry(key: "Balance → Raw Data", value: Self.hex(balData)))
 
                     if bsw1 == 0x90 && bsw2 == 0x00 && balData.count >= 4 {
                         let bal = Int(balData[0]) << 24 | Int(balData[1]) << 16 | Int(balData[2]) << 8 | Int(balData[3])
@@ -381,6 +317,13 @@ class NFCCardReader: NSObject, ObservableObject {
                 // --- Read Transaction History ---
                 info.dlog("")
                 info.dlog("[TX] === Reading transaction history ===")
+
+                // Separate collection arrays for merging
+                var method1Records: [TransactionRecord] = []
+                var fallback4E: [TransactionRecord] = []
+                var sfi3Raw: [Data] = []
+                var sfi4Raw: [Data] = []
+                var sfi5Raw: [Data] = []
 
                 // Method 1: 90 78 (KS X 6924 GET RECORD, 16B each, max 16)
                 info.dlog("[TX] Method 1: 90 78 XX 00 10")
@@ -398,18 +341,17 @@ class NFCCardReader: NSObject, ObservableObject {
                         method1Supported = true
                         if txData.count >= 10, !txData.allSatisfy({ $0 == 0 }) {
                             info.dlog("[TX] 78#\(i) → (\(txData.count)B): \(Self.hex(txData))")
-                            info.rawData.append(("TX 78#\(i)", Self.hex(txData)))
-                            info.transactions.append(Self.parseTransaction(data: txData))
+                            info.rawData.append(RawDataEntry(key: "TX 78#\(i)", value: Self.hex(txData)))
+                            method1Records.append(Self.parseTransaction(data: txData))
                         }
                     } catch { break }
                 }
                 if method1Supported {
-                    info.dlog("[TX] 90 78: \(info.transactions.count) valid records")
+                    info.dlog("[TX] 90 78: \(method1Records.count) valid records")
                 }
 
                 // Method 2: 90 4E (proprietary GET DATA, 46B) - store separately
-                var fallback4E: [TransactionRecord] = []
-                if info.transactions.isEmpty {
+                if method1Records.isEmpty {
                     info.dlog("[TX] Method 2: 90 4E (P1=00, P2=0..9)")
                     for i: UInt8 in 0...9 {
                         do {
@@ -426,7 +368,7 @@ class NFCCardReader: NSObject, ObservableObject {
                             }
                             if !txData.allSatisfy({ $0 == 0 }) {
                                 info.dlog("[TX] 4E#\(i) → (\(txData.count)B): \(Self.hex(txData))")
-                                info.rawData.append(("TX 4E#\(i)", Self.hex(txData)))
+                                info.rawData.append(RawDataEntry(key: "TX 4E#\(i)", value: Self.hex(txData)))
                                 fallback4E.append(Self.parseTransaction(data: txData))
                             }
                         } catch { break }
@@ -437,10 +379,11 @@ class NFCCardReader: NSObject, ObservableObject {
                 do {
                     info.dlog("[TX] Method 3: READ RECORD (00 B2) on SFIs")
                     let sfiValues: [(sfi: UInt8, p2: UInt8)] = [
-                        (3, 0x1C), (4, 0x24), (5, 0x2C), (6, 0x34)
+                        (3, 0x1C), (4, 0x24), (5, 0x2C), (6, 0x34),
+                        (7, 0x3C), (8, 0x44), (9, 0x4C), (10, 0x54)
                     ]
                     for (sfi, p2) in sfiValues {
-                        for i: UInt8 in 1...10 {
+                        for i: UInt8 in 1...30 { // Read up to 30 records (card returns error when done)
                             do {
                                 let (txData, tsw1, tsw2) = try await sendAPDU(
                                     tag: tag, cla: 0x00, ins: 0xB2, p1: i, p2: p2
@@ -452,8 +395,13 @@ class NFCCardReader: NSObject, ObservableObject {
                                 }
                                 if txData.count >= 10, !txData.allSatisfy({ $0 == 0 }) {
                                     info.dlog("[TX] SFI\(sfi)#\(i) → (\(txData.count)B): \(Self.hex(txData))")
-                                    info.rawData.append(("TX SFI\(sfi)#\(i)", Self.hex(txData)))
-                                    info.transactions.append(Self.parseTransaction(data: txData))
+                                    info.rawData.append(RawDataEntry(key: "TX SFI\(sfi)#\(i)", value: Self.hex(txData)))
+                                    switch sfi {
+                                    case 3: sfi3Raw.append(txData)
+                                    case 4: sfi4Raw.append(txData)
+                                    case 5: sfi5Raw.append(txData)
+                                    default: break
+                                    }
                                 }
                             } catch { break }
                         }
@@ -461,7 +409,7 @@ class NFCCardReader: NSObject, ObservableObject {
                 } // end Method 3
 
                 // Method 4: SELECT EF by file ID + READ BINARY
-                if info.transactions.isEmpty {
+                if method1Records.isEmpty && fallback4E.isEmpty && sfi4Raw.isEmpty {
                     info.dlog("[TX] Method 4: SELECT EF + READ BINARY")
                     let fileIDs: [Data] = [
                         Data([0x00, 0x04]), Data([0x00, 0x05]),
@@ -485,7 +433,7 @@ class NFCCardReader: NSObject, ObservableObject {
                             let rswHex = String(format: "%02X%02X", rsw1, rsw2)
                             info.dlog("[TX] EF \(fidHex) READ → SW:\(rswHex) (\(rbData.count)B): \(Self.hex(rbData))")
                             if rsw1 == 0x90 && rsw2 == 0x00 && rbData.count >= 10 {
-                                info.rawData.append(("EF \(fidHex)", Self.hex(rbData)))
+                                info.rawData.append(RawDataEntry(key: "EF \(fidHex)", value: Self.hex(rbData)))
                             }
                         } catch {
                             info.dlog("[TX] EF \(fidHex) error: \(error.localizedDescription)")
@@ -495,53 +443,23 @@ class NFCCardReader: NSObject, ObservableObject {
                     _ = try? await sendAPDU(tag: tag, cla: 0x00, ins: 0xA4, p1: 0x04, p2: 0x00, data: aid)
                 }
 
-                // Post-process:
-                // SFI 3 (52B) = trip detail (dates, no balance)
-                // SFI 4/5 (26B/46B) = financial (real balance, maybe dates)
-                // They overlap! Prefer records with real balance.
-                // Separate: SFI records (balance>0 from SFI4, or date from SFI3) vs 90 4E
-                let sfiRecords = info.transactions.filter { $0.balance > 0 || ($0.date != nil && $0.balance == 0) }
-                let hasSFIBalance = sfiRecords.contains { $0.balance > 0 }
-
-                // If SFI has balance data, use ONLY SFI records (skip 90 4E duplicates)
-                let withBalance: [TransactionRecord]
-                let withDatesOnly: [TransactionRecord]
-                if hasSFIBalance {
-                    // SFI has balance data - use only SFI records
-                    withBalance = info.transactions.filter { $0.balance > 0 }
-                    withDatesOnly = []
-                } else if !sfiRecords.isEmpty {
-                    // SFI has dates but no balance - use with running calc
-                    withBalance = []
-                    withDatesOnly = sfiRecords.filter { $0.date != nil }
-                } else {
-                    // No SFI data at all - use 90 4E fallback
-                    withBalance = fallback4E.filter { $0.balance > 0 }
-                    withDatesOnly = fallback4E.filter { $0.date != nil && $0.balance == 0 }
+                // Post-process: merge SFI 3 (timestamps) with SFI 4 (balances)
+                let isTmoney = info.cardType == .tmoney || info.cardType == .railplus
+                if !sfi4Raw.isEmpty {
+                    let merged = Self.mergeSFIData(
+                        sfi3: sfi3Raw, sfi4: sfi4Raw, sfi5: sfi5Raw,
+                        isTmoney: isTmoney
+                    )
+                    info.transactions = merged.transactions
+                    info.trips = merged.trips
+                    info.dlog("[TX] Merged \(info.transactions.count) transactions + \(info.trips.count) trips")
+                } else if !method1Records.isEmpty {
+                    info.transactions = method1Records.filter { $0.amount > 0 }
+                    info.dlog("[TX] Using \(info.transactions.count) records from 90 78")
+                } else if !fallback4E.isEmpty {
+                    info.transactions = fallback4E.filter { $0.amount > 0 }
+                    info.dlog("[TX] Using \(info.transactions.count) records from 90 4E")
                 }
-
-                if !withBalance.isEmpty {
-                    // Use SFI 4/5 records (real balance from card)
-                    info.transactions = withBalance
-                    info.dlog("[TX] Using \(withBalance.count) records with real balance (SFI 4/5)")
-                } else if !withDatesOnly.isEmpty {
-                    // Fallback: SFI 3 records with running balance
-                    info.transactions = withDatesOnly
-                    var runBal = info.balance
-                    var filled: [TransactionRecord] = []
-                    for tx in info.transactions {
-                        filled.append(TransactionRecord(amount: tx.amount, balance: runBal, date: tx.date, type: tx.type))
-                        if tx.type == .topUp { runBal -= tx.amount }
-                        else if tx.amount > 0 { runBal += tx.amount }
-                    }
-                    info.transactions = filled
-                    info.dlog("[TX] Using \(filled.count) records with running balance (SFI 3)")
-                }
-
-                // Filter: remove fare=0 entries (boarding taps with no charge)
-                info.transactions = info.transactions.filter { $0.amount > 0 }
-                // Don't sort - records from card are already newest-first
-                // SFI 4 = recent trips, SFI 5 = older top-ups
 
                 // Print full summary to console
                 print("[NFC-CTDO] ")
@@ -600,10 +518,10 @@ class NFCCardReader: NSObject, ObservableObject {
         cardInfo = info
         isScanning = false
         statusMessage = info.cardType == .unknown
-            ? String(localized: "카드를 읽었지만 인식할 수 없는 카드입니다")
-            : String(localized: "\(info.cardType.displayName) 읽기 완료!")
+            ? L("카드를 읽었지만 인식할 수 없는 카드입니다")
+            : L("\(info.cardType.displayName) 읽기 완료!")
 
-        session.alertMessage = String(localized: "카드 읽기 완료!")
+        session.alertMessage = L("카드 읽기 완료!")
         session.invalidate()
     }
 
@@ -619,39 +537,56 @@ class NFCCardReader: NSObject, ObservableObject {
         default: familyName = "Unknown (\(tag.mifareFamily.rawValue))"
         }
         info.tagType = "MIFARE \(familyName)"
-        info.rawData.append(("UID", Self.hex(tag.identifier)))
-        info.rawData.append(("MIFARE Family", familyName))
+        info.rawData.append(RawDataEntry(key: "UID", value: Self.hex(tag.identifier)))
+        info.rawData.append(RawDataEntry(key: "MIFARE Family", value: familyName))
         info.dlog("[TAG] Type: MIFARE \(familyName)")
         info.dlog("[TAG] UID: \(Self.hex(tag.identifier))")
 
         if let hist = tag.historicalBytes {
-            info.rawData.append(("Historical Bytes", Self.hex(hist)))
+            info.rawData.append(RawDataEntry(key: "Historical Bytes", value: Self.hex(hist)))
             info.dlog("[TAG] Historical Bytes: \(Self.hex(hist))")
         }
 
         cardInfo = info
         isScanning = false
-        statusMessage = String(localized: "MIFARE \(familyName) 카드")
+        statusMessage = L("MIFARE \(familyName) 카드")
 
-        session.alertMessage = String(localized: "카드 읽기 완료!")
+        session.alertMessage = L("카드 읽기 완료!")
         session.invalidate()
     }
 
-    // Korean transit epoch: 1998-01-01 00:00:00 KST
-    private static let koreanTransitEpoch: Date = {
+    // Korean transit timestamp: packed format [16-bit day][5-bit hour][6-bit minute][5-bit second/2]
+    // Day 0 = 1989-06-14 (derived from cross-referencing raw card data with known trip dates)
+    private static let transitDayEpoch: Date = {
         var c = DateComponents()
-        c.year = 1998; c.month = 1; c.day = 1
+        c.year = 1989; c.month = 6; c.day = 14
         c.hour = 0; c.minute = 0; c.second = 0
         c.timeZone = TimeZone(identifier: "Asia/Seoul")
         return Calendar.current.date(from: c)!
     }()
 
-    private static let epoch2000: Date = {
-        var c = DateComponents()
-        c.year = 2000; c.month = 1; c.day = 1
-        c.timeZone = TimeZone(identifier: "Asia/Seoul")
-        return Calendar.current.date(from: c)!
-    }()
+    // Parse packed timestamp from SFI 3 bytes[11-14]
+    // Format: bits[31:16]=day counter, bits[15:11]=hour, bits[10:5]=minute, bits[4:0]=second/2
+    private static func parsePackedTimestamp(_ raw: UInt32) -> Date? {
+        let dayCount = Int(raw >> 16)
+        let timePart = raw & 0xFFFF
+        let hour = Int((timePart >> 11) & 0x1F)
+        let minute = Int((timePart >> 5) & 0x3F)
+        let second = Int(timePart & 0x1F) * 2
+
+        guard dayCount > 0, hour < 24, minute < 60, second < 60 else { return nil }
+
+        let kst = TimeZone(identifier: "Asia/Seoul")!
+        let calendar = Calendar.current
+        guard let dayDate = calendar.date(byAdding: .day, value: dayCount, to: transitDayEpoch) else { return nil }
+
+        var components = calendar.dateComponents(in: kst, from: dayDate)
+        components.hour = hour
+        components.minute = minute
+        components.second = second
+
+        return calendar.date(from: components)
+    }
 
     private static func parseTransaction(data: Data) -> TransactionRecord {
         if data.count >= 50 {
@@ -670,7 +605,7 @@ class NFCCardReader: NSObject, ObservableObject {
     // [2]     0x00=boarding (승차), 0x01=alighting (하차)
     // [3]     transport: 0x00=bus, 0x01=metro, 0x02=train
     // [4-5]   counter
-    // [11-14] timestamp (seconds from 1998-01-01 KST)
+    // [11-14] timestamp (packed: [16-bit day from 1989-06-14][5h][6m][5s/2])
     // [22-23] base fare (big-endian KRW)
     // [24-27] terminal/station ID
     // [50-51] distance surcharge
@@ -679,17 +614,11 @@ class NFCCardReader: NSObject, ObservableObject {
         let txType: TransactionRecord.TransactionType = boarding ? .payment : .transfer
         // byte[3] = transport type (for future use in display)
 
-        // Timestamp: bytes 11-14
+        // Timestamp: bytes 11-14, packed format [16-bit day][5h][6m][5s/2]
         var date: Date?
         if data.count >= 15 {
-            let secs = UInt32(data[11]) << 24 | UInt32(data[12]) << 16 | UInt32(data[13]) << 8 | UInt32(data[14])
-            if secs > 0 {
-                let candidate = koreanTransitEpoch.addingTimeInterval(Double(secs))
-                let year = Calendar.current.component(.year, from: candidate)
-                if year >= 2010 && year <= 2035 {
-                    date = candidate
-                }
-            }
+            let raw = UInt32(data[11]) << 24 | UInt32(data[12]) << 16 | UInt32(data[13]) << 8 | UInt32(data[14])
+            date = parsePackedTimestamp(raw)
         }
 
         // Fare: bytes 22-23
@@ -743,6 +672,196 @@ class NFCCardReader: NSObject, ObservableObject {
         return TransactionRecord(amount: fare, balance: balance, date: nil, type: txType)
     }
 
+    // Merge SFI 3 (trip timestamps) with SFI 4 (financial/balance)
+    // Returns: (transactions for financial history, trips for transit detail)
+    private static func mergeSFIData(
+        sfi3: [Data], sfi4: [Data], sfi5: [Data],
+        isTmoney: Bool
+    ) -> (transactions: [TransactionRecord], trips: [TripRecord]) {
+
+        // === SECTION 1: Build financial transaction list (이용 내역) ===
+
+        // Extract alighting dates from SFI 3 for matching with SFI 4
+        struct SFI3Alight {
+            let date: Date?
+            let fare: Int
+            let tripCounter: UInt8
+        }
+        var sfi3Alights: [SFI3Alight] = []
+        for data in sfi3 {
+            guard data.count >= 24, data[2] == 0x01 else { continue }
+            let raw = UInt32(data[11]) << 24 | UInt32(data[12]) << 16 | UInt32(data[13]) << 8 | UInt32(data[14])
+            let fare = Int(data[22]) << 8 | Int(data[23])
+            sfi3Alights.append(SFI3Alight(date: parsePackedTimestamp(raw), fare: fare, tripCounter: data[4]))
+        }
+
+        var transactions: [TransactionRecord] = []
+        var alightIdx = 0
+        var lastSFI4Balance: Int? = nil
+        // Map: SFI3 alight index → actual SFI4 fare and balance
+        var actualFareByAlightIdx: [Int: Int] = [:]
+        var actualBalanceByAlightIdx: [Int: Int] = [:]
+
+        for data in sfi4 {
+            guard data.count >= 14 else { continue }
+            let typeByte = data[0]
+            guard typeByte == 0x01 || typeByte == 0x02 else { continue }
+
+            let isTopUp = typeByte == 0x02
+            let balance: Int
+            let fare: Int
+            if isTmoney {
+                balance = Int(data[2]) << 24 | Int(data[3]) << 16 | Int(data[4]) << 8 | Int(data[5])
+                fare = Int(data[10]) << 24 | Int(data[11]) << 16 | Int(data[12]) << 8 | Int(data[13])
+            } else {
+                balance = Int(data[4]) << 8 | Int(data[5])
+                fare = Int(data[12]) << 8 | Int(data[13])
+            }
+            lastSFI4Balance = balance
+
+            if isTopUp {
+                transactions.append(TransactionRecord(amount: fare, balance: balance, date: nil, type: .topUp))
+                continue
+            }
+            guard fare > 0 else { continue }
+
+            // Check marker at bytes[14-15]: 0x4913/0x49XX=standard transit, 0x0720=sub-charge/transfer
+            let marker: UInt16 = data.count >= 16
+                ? UInt16(data[14]) << 8 | UInt16(data[15])
+                : 0x4913
+
+            if marker != 0x4913 {
+                // Non-standard marker (0x0720=sub-charge/transfer, 0x4923=transfer surcharge, etc.)
+                // Parse BCD timestamp from bytes[26-32] if available
+                // Parse BCD date: bytes = [YY YY MM DD HH MM SS]
+                var bcdDate: Date? = nil
+                if isTmoney && data.count >= 33 && data[26] != 0x00 {
+                    let yearHi = Int(data[26] >> 4) * 10 + Int(data[26] & 0x0F) // 0x20 → 20
+                    let yearLo = Int(data[27] >> 4) * 10 + Int(data[27] & 0x0F) // 0x26 → 26
+                    let year = yearHi * 100 + yearLo // → 2026
+                    let month = Int(data[28] >> 4) * 10 + Int(data[28] & 0x0F)
+                    let day = Int(data[29] >> 4) * 10 + Int(data[29] & 0x0F)
+                    let hour = Int(data[30] >> 4) * 10 + Int(data[30] & 0x0F)
+                    let minute = Int(data[31] >> 4) * 10 + Int(data[31] & 0x0F)
+                    let second = Int(data[32] >> 4) * 10 + Int(data[32] & 0x0F)
+                    if year > 2000 && month >= 1 && month <= 12 && day >= 1 && day <= 31 {
+                        var c = DateComponents()
+                        c.year = year; c.month = month; c.day = day
+                        c.hour = hour; c.minute = minute; c.second = second
+                        c.timeZone = TimeZone(identifier: "Asia/Seoul")
+                        bcdDate = Calendar.current.date(from: c)
+                    }
+                }
+                transactions.append(TransactionRecord(amount: fare, balance: balance, date: bcdDate, type: .payment))
+            } else {
+                // 0x4913 = standard transit charge → match with SFI3 alighting
+                var date: Date? = nil
+                if alightIdx < sfi3Alights.count {
+                    date = sfi3Alights[alightIdx].date
+                    actualFareByAlightIdx[alightIdx] = fare
+                    actualBalanceByAlightIdx[alightIdx] = balance
+                    alightIdx += 1
+                }
+                transactions.append(TransactionRecord(amount: fare, balance: balance, date: date, type: .payment))
+            }
+        }
+
+        // Add remaining SFI 3 alighting records (older trips beyond SFI 4 range)
+        if alightIdx < sfi3Alights.count {
+            var runBal = lastSFI4Balance ?? 0
+            var seenCounters = Set<UInt8>()
+            for i in alightIdx..<sfi3Alights.count {
+                let alight = sfi3Alights[i]
+                guard alight.fare > 0, seenCounters.insert(alight.tripCounter).inserted else { continue }
+                transactions.append(TransactionRecord(
+                    amount: alight.fare, balance: runBal, date: alight.date, type: .payment
+                ))
+                runBal += alight.fare
+            }
+        }
+
+        // === SECTION 2: Build trip records (교통 이용 내역) ===
+
+        // Parse ALL SFI 3 records into legs, group by trip counter
+        struct ParsedLeg {
+            let isBoarding: Bool
+            let transportType: UInt8
+            let tripCounter: UInt8
+            let date: Date?
+            let fare: Int
+            let distanceMeters: Int // bytes[19-20] on alighting records
+        }
+        var allLegs: [ParsedLeg] = []
+        for data in sfi3 {
+            guard data.count >= 24 else { continue }
+            let raw = UInt32(data[11]) << 24 | UInt32(data[12]) << 16 | UInt32(data[13]) << 8 | UInt32(data[14])
+            let isAlighting = data[2] == 0x01
+            // bytes[19-20] = distance in meters (only meaningful on alighting records)
+            let dist = (isAlighting && data.count >= 21)
+                ? Int(data[19]) << 8 | Int(data[20])
+                : 0
+            allLegs.append(ParsedLeg(
+                isBoarding: !isAlighting,
+                transportType: data[3],
+                tripCounter: data[4],
+                date: parsePackedTimestamp(raw),
+                fare: Int(data[22]) << 8 | Int(data[23]),
+                distanceMeters: dist
+            ))
+        }
+
+        // Group legs by trip counter, preserving order (newest trips first)
+        var tripMap: [UInt8: [ParsedLeg]] = [:]
+        var tripOrder: [UInt8] = [] // preserve newest-first order
+        for leg in allLegs {
+            if tripMap[leg.tripCounter] == nil {
+                tripOrder.append(leg.tripCounter)
+            }
+            tripMap[leg.tripCounter, default: []].append(leg)
+        }
+
+        // Build alight index lookup: trip counter → SFI3 alight index
+        var counterToAlightIdx: [UInt8: Int] = [:]
+        for (i, alight) in sfi3Alights.enumerated() {
+            if counterToAlightIdx[alight.tripCounter] == nil {
+                counterToAlightIdx[alight.tripCounter] = i
+            }
+        }
+
+        var trips: [TripRecord] = []
+        for counter in tripOrder {
+            guard let legs = tripMap[counter] else { continue }
+            // Total fare: prefer actual SFI4 fare (includes distance surcharge) over SFI3 base fare
+            // Prefer alighting fare; fallback to boarding fare for incomplete trips
+            let sfi3Fare = legs.first(where: { !$0.isBoarding })?.fare
+                ?? legs.first(where: { $0.isBoarding })?.fare
+                ?? 0
+            let actualFare: Int
+            if let aidx = counterToAlightIdx[counter], let sfi4Fare = actualFareByAlightIdx[aidx] {
+                actualFare = sfi4Fare  // Real charge from SFI4
+            } else {
+                actualFare = sfi3Fare  // Fallback to SFI3 base fare
+            }
+            // Distance and balance from SFI4
+            let distance = legs.first(where: { !$0.isBoarding })?.distanceMeters ?? 0
+            let balAfter: Int
+            if let aidx = counterToAlightIdx[counter], let bal = actualBalanceByAlightIdx[aidx] {
+                balAfter = bal
+            } else {
+                balAfter = 0
+            }
+            let tripLegs = legs.map { TripLeg(
+                isBoarding: $0.isBoarding,
+                transportType: $0.transportType,
+                date: $0.date,
+                fare: $0.fare
+            )}
+            trips.append(TripRecord(tripCounter: counter, totalFare: actualFare, distanceMeters: distance, balanceAfter: balAfter, legs: tripLegs))
+        }
+
+        return (transactions, trips)
+    }
+
     // T-money 30-46 byte record from 90 4E or SFI 4/5:
     // [0]     type: 01=transit, 02=topUp
     // [2-5]   balance after (big-endian)
@@ -767,19 +886,10 @@ class NFCCardReader: NSObject, ObservableObject {
             ? Int(data[10]) << 24 | Int(data[11]) << 16 | Int(data[12]) << 8 | Int(data[13])
             : 0
 
-        // Only parse date if bytes 14-15 = 07 20 (90 4E / SFI 5 format)
-        // Bytes 14-15 = 49 13 means SFI 4 financial record (no timestamp)
-        var date: Date?
-        if data.count >= 22 && data[14] == 0x07 && data[15] == 0x20 {
-            let secs = UInt32(data[18]) << 24 | UInt32(data[19]) << 16 | UInt32(data[20]) << 8 | UInt32(data[21])
-            if secs > 0 {
-                let candidate = epoch2000.addingTimeInterval(Double(secs))
-                let year = Calendar.current.component(.year, from: candidate)
-                if year >= 2020 && year <= 2030 {
-                    date = candidate
-                }
-            }
-        }
+        // Note: bytes[14-15]=0x0720 records do NOT have reliable timestamps
+        // bytes[18-21] are not seconds-from-epoch (verified with real card data)
+        // bytes[26-32] contain BCD last-NFC-read time on some records, not transaction time
+        let date: Date? = nil
 
         print("[NFC-CTDO] [PARSE] T-money long: type=\(typeByte) cost=\(cost) bal=\(balance) date=\(date?.description ?? "nil")")
         return TransactionRecord(amount: cost, balance: balance, date: date, type: txType)
@@ -824,7 +934,7 @@ extension NFCCardReader: NFCTagReaderSessionDelegate {
             if let nfcError = error as? NFCReaderError,
                nfcError.code != .readerSessionInvalidationErrorUserCanceled,
                nfcError.code != .readerSessionInvalidationErrorFirstNDEFTagRead {
-                self.errorMessage = String(localized: "NFC 오류: \(error.localizedDescription)")
+                self.errorMessage = L("NFC 오류: \(error.localizedDescription)")
             }
             self.isScanning = false
         }
@@ -873,9 +983,16 @@ extension NFCCardReader: NFCTagReaderSessionDelegate {
                 var info = TransitCardInfo()
                 info.debugLog = debugLines
                 self.cardInfo = info
-                self.errorMessage = String(localized: "카드 연결 실패: \(error.localizedDescription)")
+
+                // Detect bank/payment card (iOS blocks EMV cards for third-party apps)
+                if nsErr.domain == "NFCError" && nsErr.code == 2 {
+                    self.errorMessage = L("은행/신용카드는 iOS 보안 정책으로 읽을 수 없습니다. T-money, Cashbee 등 교통 전용 카드만 지원됩니다.")
+                    session.invalidate(errorMessage: L("은행카드 미지원"))
+                } else {
+                    self.errorMessage = L("카드 연결 실패: \(error.localizedDescription)")
+                    session.invalidate(errorMessage: L("연결 실패: \(error.localizedDescription)"))
+                }
                 self.isScanning = false
-                session.invalidate(errorMessage: String(localized: "연결 실패: \(error.localizedDescription)"))
                 return
             }
 
@@ -900,9 +1017,9 @@ extension NFCCardReader: NFCTagReaderSessionDelegate {
                 var info = TransitCardInfo()
                 info.debugLog = debugLines
                 self.cardInfo = info
-                self.errorMessage = String(localized: "지원하지 않는 카드")
+                self.errorMessage = L("지원하지 않는 카드")
                 self.isScanning = false
-                session.invalidate(errorMessage: String(localized: "지원하지 않는 카드"))
+                session.invalidate(errorMessage: L("지원하지 않는 카드"))
             }
         }
     }
