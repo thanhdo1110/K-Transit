@@ -17,8 +17,9 @@ build/
 # Binary / Media (dev screenshots)
 *.bin
 *.jpeg
-[0-9].png
-IMG_*.png
+# Dev screenshots (root only, not IMG/ folder)
+/[0-9].png
+/IMG_*.png
 
 # Archive exports
 NFC Tools [CTDO] 2026-*/
