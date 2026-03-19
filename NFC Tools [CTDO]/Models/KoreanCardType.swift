@@ -7,7 +7,7 @@ enum KoreanCardType: String, Sendable, Codable {
     case unknown = "알 수 없음"
 
     var displayName: String {
-        L(String.LocalizationValue(rawValue))
+        L(rawValue)
     }
 
     var icon: String {

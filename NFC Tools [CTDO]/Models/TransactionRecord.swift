@@ -14,7 +14,7 @@ struct TransactionRecord: Identifiable, Sendable, Codable {
         case unknown = "기타"
 
         var displayName: String {
-            L(String.LocalizationValue(rawValue))
+            L(rawValue)
         }
 
         var icon: String {
