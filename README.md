@@ -16,16 +16,9 @@ K-Transit reads Korean public transit cards through your iPhone's NFC sensor, di
 
 ## Screenshots
 
-<p align="center">
-  <img src="IMG/IMG_3549.PNG" width="200" />
-  <img src="IMG/IMG_3550.PNG" width="200" />
-  <img src="IMG/IMG_3551.PNG" width="200" />
-  <img src="IMG/IMG_3552.PNG" width="200" />
-</p>
-
-<p align="center">
-  <em>Home Screen</em> · <em>Transaction History</em> · <em>Trip Details</em> · <em>Settings</em>
-</p>
+| Home | Transactions | Trip Details | Settings |
+|:----:|:------------:|:------------:|:--------:|
+| <img src="IMG/IMG_3549.PNG" width="180" /> | <img src="IMG/IMG_3550.PNG" width="180" /> | <img src="IMG/IMG_3551.PNG" width="180" /> | <img src="IMG/IMG_3552.PNG" width="180" /> |
 
 ---
 
